@@ -1,0 +1,429 @@
+[gd_scene load_steps=18 format=3 uid="uid://cvwvewc6ehpta"]
+
+[ext_resource type="Script" path="res://monster_spawner.gd" id="1_72xek"]
+[ext_resource type="PackedScene" uid="uid://cr11a07s1qnmk" path="res://models/bones.gltf" id="1_jcutb"]
+[ext_resource type="PackedScene" uid="uid://68t8hgy7etfn" path="res://models/butcher.gltf" id="2_2jb2l"]
+[ext_resource type="PackedScene" uid="uid://t67uc02qo7ja" path="res://models/meat.gltf" id="3_v567o"]
+[ext_resource type="Texture2D" uid="uid://cwcmbhoii3i7p" path="res://textures/texture_08.png" id="4_n4rg6"]
+[ext_resource type="Script" path="res://player_controller.gd" id="4_y2tpb"]
+
+[sub_resource type="Environment" id="Environment_jfwdq"]
+volumetric_fog_enabled = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tibbh"]
+size = Vector3(100, 0.1, 100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wxris"]
+albedo_texture = ExtResource("4_n4rg6")
+uv1_scale = Vector3(100, 100, 100)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_qvk58"]
+size = Vector2(100, 100)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0r2ti"]
+size = Vector3(0.907, 1.547, 0.181)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lusjm"]
+size = Vector3(0.493808, 0.104154, 0.643735)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_eq1pu"]
+radius = 0.6
+height = 1.8
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_am2vd"]
+
+[sub_resource type="Animation" id="Animation_4h2up"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pivot/knife:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.357553, -0.228907, -0.545989)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pivot/knife:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1.37596, -1.12185, -3.02997)]
+}
+
+[sub_resource type="Animation" id="Animation_tmv3u"]
+resource_name = "slash"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pivot/knife:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0.357553, -0.228907, -0.545989), Vector3(0.605625, -0.0686204, -0.545989), Vector3(1.00713, -0.212788, -0.892001), Vector3(0.893312, -0.212788, -0.918638), Vector3(-0.120911, -0.212788, -0.892001), Vector3(0.357553, -0.228907, -0.545989)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pivot/knife:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1, 0.2, 0.3, 0.4, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1.37596, -1.12185, -3.02997), Vector3(0.735698, -0.97276, -2.85473), Vector3(0.258309, -0.966319, -3.12588), Vector3(0.120773, 0.19732, -2.92181), Vector3(1.37596, -1.12185, -3.02997)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7d1er"]
+_data = {
+"RESET": SubResource("Animation_4h2up"),
+"slash": SubResource("Animation_tmv3u")
+}
+
+[node name="main" type="Node3D"]
+
+[node name="Room" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Room"]
+environment = SubResource("Environment_jfwdq")
+
+[node name="Floor" type="StaticBody3D" parent="Room"]
+
+[node name="Collider" type="CollisionShape3D" parent="Room/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+shape = SubResource("BoxShape3D_tibbh")
+
+[node name="floor" type="MeshInstance3D" parent="Room/Floor"]
+material_override = SubResource("StandardMaterial3D_wxris")
+mesh = SubResource("PlaneMesh_qvk58")
+
+[node name="bones" parent="Room/Floor" instance=ExtResource("1_jcutb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.28563, 0, 6.97587)
+
+[node name="bones2" parent="Room/Floor" instance=ExtResource("1_jcutb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.51217, 0, -2.00803)
+
+[node name="bones3" parent="Room/Floor" instance=ExtResource("1_jcutb")]
+transform = Transform3D(0.944234, -0.165151, -0.284865, 0.158112, 0.986268, -0.0477007, 0.288831, 0, 0.95738, -1.87916, 0, -6.21862)
+
+[node name="bones4" parent="Room/Floor" instance=ExtResource("1_jcutb")]
+transform = Transform3D(0.823354, 0, -0.567528, 0, 1, 0, 0.567528, 0, 0.823354, -2.37846, 0, -3.2561)
+
+[node name="bones5" parent="Room/Floor" instance=ExtResource("1_jcutb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.17913, 0, 6.11986)
+
+[node name="bones6" parent="Room/Floor" instance=ExtResource("1_jcutb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.31786, 0, 9.09518)
+
+[node name="bones7" parent="Room/Floor" instance=ExtResource("1_jcutb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.2942, 0, -10.9899)
+
+[node name="Walls" type="Node3D" parent="Room"]
+
+[node name="wall" type="MeshInstance3D" parent="Room/Walls"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 3.41032, -48.1274)
+material_override = SubResource("StandardMaterial3D_wxris")
+mesh = SubResource("PlaneMesh_qvk58")
+skeleton = NodePath("../../Floor")
+
+[node name="wall2" type="MeshInstance3D" parent="Room/Walls"]
+transform = Transform3D(-4.37114e-08, -1, 4.37114e-08, 0, -4.37114e-08, -1, 1, -4.37114e-08, 0, 46.2096, 3.41032, -5.52714)
+material_override = SubResource("StandardMaterial3D_wxris")
+mesh = SubResource("PlaneMesh_qvk58")
+skeleton = NodePath("../../Floor")
+
+[node name="wall3" type="MeshInstance3D" parent="Room/Walls"]
+transform = Transform3D(-1, 8.74228e-08, 0, 0, -4.37114e-08, -1, -8.74228e-08, -1, 4.37114e-08, -1.89243, 3.41032, 43.0882)
+material_override = SubResource("StandardMaterial3D_wxris")
+mesh = SubResource("PlaneMesh_qvk58")
+skeleton = NodePath("../../Floor")
+
+[node name="wall4" type="MeshInstance3D" parent="Room/Walls"]
+transform = Transform3D(1.31134e-07, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, 1.31134e-07, -1.42109e-14, -48.0607, 3.41032, 0.983288)
+material_override = SubResource("StandardMaterial3D_wxris")
+mesh = SubResource("PlaneMesh_qvk58")
+skeleton = NodePath("../../Floor")
+
+[node name="Ceiling" type="MeshInstance3D" parent="Room"]
+transform = Transform3D(1, 0, 0, 0, -1, 1.50996e-07, 0, -1.50996e-07, -1, 0, 3.39172, 0)
+material_override = SubResource("StandardMaterial3D_wxris")
+mesh = SubResource("PlaneMesh_qvk58")
+skeleton = NodePath("../Floor/floor")
+
+[node name="roof" type="MeshInstance3D" parent="Room/Ceiling"]
+transform = Transform3D(1, 0, 0, 0, -1, -1.50996e-07, 0, 1.50996e-07, -1, 0, -0.0185955, -0.000999997)
+material_override = SubResource("StandardMaterial3D_wxris")
+mesh = SubResource("PlaneMesh_qvk58")
+skeleton = NodePath("../../Floor")
+
+[node name="MeatHook" type="Node3D" parent="Room/Ceiling"]
+transform = Transform3D(0.903978, 0, -0.427579, -6.45626e-08, -1, -1.36497e-07, -0.427579, 1.50996e-07, -0.903978, 0.849147, 3.39172, 2.47449)
+
+[node name="hook" type="HingeJoint3D" parent="Room/Ceiling/MeatHook"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.47959, 3.49539, 0.308372)
+node_a = NodePath("../meat")
+params/bias = 0.1
+angular_limit/enable = true
+angular_limit/upper = 0.872665
+angular_limit/lower = -0.872665
+
+[node name="meat" type="RigidBody3D" parent="Room/Ceiling/MeatHook"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45982, 3.08245, 0.318976)
+collision_layer = 8
+collision_mask = 8
+mass = 0.1
+
+[node name="model" parent="Room/Ceiling/MeatHook/meat" instance=ExtResource("3_v567o")]
+transform = Transform3D(1.15, 0, 0, 0, 1.15, 0, 0, 0, 1.15, 0, -1.41294, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/Ceiling/MeatHook/meat"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.60907, 0)
+shape = SubResource("BoxShape3D_0r2ti")
+
+[node name="MeatHook2" type="Node3D" parent="Room/Ceiling"]
+transform = Transform3D(0.682113, 0, 0.731247, 1.10415e-07, -1, -1.02996e-07, 0.731247, 1.50996e-07, -0.682113, -3.05836, 3.39172, 9.01908)
+
+[node name="hook" type="HingeJoint3D" parent="Room/Ceiling/MeatHook2"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.47959, 3.49539, 0.308372)
+node_a = NodePath("../meat")
+params/bias = 0.1
+angular_limit/enable = true
+angular_limit/upper = 0.872665
+angular_limit/lower = -0.872665
+
+[node name="meat" type="RigidBody3D" parent="Room/Ceiling/MeatHook2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45982, 3.08245, 0.318976)
+collision_layer = 8
+collision_mask = 8
+mass = 0.1
+
+[node name="model" parent="Room/Ceiling/MeatHook2/meat" instance=ExtResource("3_v567o")]
+transform = Transform3D(1.15, 0, 0, 0, 1.15, 0, 0, 0, 1.15, 0, -1.41294, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/Ceiling/MeatHook2/meat"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.60907, 0)
+shape = SubResource("BoxShape3D_0r2ti")
+
+[node name="MeatHook3" type="Node3D" parent="Room/Ceiling"]
+transform = Transform3D(0.422065, 0, -0.906566, -1.36888e-07, -1, -6.373e-08, -0.906566, 1.50996e-07, -0.422065, -1.97225, 3.39172, 2.91605)
+
+[node name="hook" type="HingeJoint3D" parent="Room/Ceiling/MeatHook3"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.47959, 3.49539, 0.308372)
+node_a = NodePath("../meat")
+params/bias = 0.1
+angular_limit/enable = true
+angular_limit/upper = 0.872665
+angular_limit/lower = -0.872665
+
+[node name="meat" type="RigidBody3D" parent="Room/Ceiling/MeatHook3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45982, 3.08245, 0.318976)
+collision_layer = 8
+collision_mask = 8
+mass = 0.1
+
+[node name="model" parent="Room/Ceiling/MeatHook3/meat" instance=ExtResource("3_v567o")]
+transform = Transform3D(1.15, 0, 0, 0, 1.15, 0, 0, 0, 1.15, 0, -1.41294, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/Ceiling/MeatHook3/meat"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.60907, 0)
+shape = SubResource("BoxShape3D_0r2ti")
+
+[node name="MeatHook4" type="Node3D" parent="Room/Ceiling"]
+transform = Transform3D(1, 0, 0, 0, -1, -1.50996e-07, 0, 1.50996e-07, -1, 0.526507, 3.39172, 4.1114)
+
+[node name="hook" type="HingeJoint3D" parent="Room/Ceiling/MeatHook4"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.47959, 3.49539, 0.308372)
+node_a = NodePath("../meat")
+params/bias = 0.1
+angular_limit/enable = true
+angular_limit/upper = 0.872665
+angular_limit/lower = -0.872665
+
+[node name="meat" type="RigidBody3D" parent="Room/Ceiling/MeatHook4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45982, 3.08245, 0.318976)
+collision_layer = 8
+collision_mask = 8
+mass = 0.1
+
+[node name="model" parent="Room/Ceiling/MeatHook4/meat" instance=ExtResource("3_v567o")]
+transform = Transform3D(1.15, 0, 0, 0, 1.15, 0, 0, 0, 1.15, 0, -1.41294, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/Ceiling/MeatHook4/meat"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.60907, 0)
+shape = SubResource("BoxShape3D_0r2ti")
+
+[node name="MeatHook5" type="Node3D" parent="Room/Ceiling"]
+transform = Transform3D(1, 0, 0, 0, -1, -1.50996e-07, 0, 1.50996e-07, -1, -7.80819, 3.39172, 10.484)
+
+[node name="hook" type="HingeJoint3D" parent="Room/Ceiling/MeatHook5"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.47959, 3.49539, 0.308372)
+node_a = NodePath("../meat")
+params/bias = 0.1
+angular_limit/enable = true
+angular_limit/upper = 0.872665
+angular_limit/lower = -0.872665
+
+[node name="meat" type="RigidBody3D" parent="Room/Ceiling/MeatHook5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45982, 3.08245, 0.318976)
+collision_layer = 8
+collision_mask = 8
+mass = 0.1
+
+[node name="model" parent="Room/Ceiling/MeatHook5/meat" instance=ExtResource("3_v567o")]
+transform = Transform3D(1.15, 0, 0, 0, 1.15, 0, 0, 0, 1.15, 0, -1.41294, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/Ceiling/MeatHook5/meat"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.60907, 0)
+shape = SubResource("BoxShape3D_0r2ti")
+
+[node name="MeatHook6" type="Node3D" parent="Room/Ceiling"]
+transform = Transform3D(1, 0, 0, 0, -1, -1.50996e-07, 0, 1.50996e-07, -1, 4.92023, 3.39172, -3.77887)
+
+[node name="hook" type="HingeJoint3D" parent="Room/Ceiling/MeatHook6"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.47959, 3.49539, 0.308372)
+node_a = NodePath("../meat")
+params/bias = 0.1
+angular_limit/enable = true
+angular_limit/upper = 0.872665
+angular_limit/lower = -0.872665
+
+[node name="meat" type="RigidBody3D" parent="Room/Ceiling/MeatHook6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45982, 3.08245, 0.318976)
+collision_layer = 8
+collision_mask = 8
+mass = 0.1
+
+[node name="model" parent="Room/Ceiling/MeatHook6/meat" instance=ExtResource("3_v567o")]
+transform = Transform3D(1.15, 0, 0, 0, 1.15, 0, 0, 0, 1.15, 0, -1.41294, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/Ceiling/MeatHook6/meat"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.60907, 0)
+shape = SubResource("BoxShape3D_0r2ti")
+
+[node name="MeatHook7" type="Node3D" parent="Room/Ceiling"]
+transform = Transform3D(1, 0, 0, 0, -1, -1.50996e-07, 0, 1.50996e-07, -1, -8.59136, 3.39172, 3.02906)
+
+[node name="hook" type="HingeJoint3D" parent="Room/Ceiling/MeatHook7"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.47959, 3.49539, 0.308372)
+node_a = NodePath("../meat")
+params/bias = 0.1
+angular_limit/enable = true
+angular_limit/upper = 0.872665
+angular_limit/lower = -0.872665
+
+[node name="meat" type="RigidBody3D" parent="Room/Ceiling/MeatHook7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45982, 3.08245, 0.318976)
+collision_layer = 8
+collision_mask = 8
+mass = 0.1
+
+[node name="model" parent="Room/Ceiling/MeatHook7/meat" instance=ExtResource("3_v567o")]
+transform = Transform3D(1.15, 0, 0, 0, 1.15, 0, 0, 0, 1.15, 0, -1.41294, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/Ceiling/MeatHook7/meat"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.60907, 0)
+shape = SubResource("BoxShape3D_0r2ti")
+
+[node name="MeatHook8" type="Node3D" parent="Room/Ceiling"]
+transform = Transform3D(1, 0, 0, 0, -1, -1.50996e-07, 0, 1.50996e-07, -1, -9.30498, 3.39172, -2.65409)
+
+[node name="hook" type="HingeJoint3D" parent="Room/Ceiling/MeatHook8"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.47959, 3.49539, 0.308372)
+node_a = NodePath("../meat")
+params/bias = 0.1
+angular_limit/enable = true
+angular_limit/upper = 0.872665
+angular_limit/lower = -0.872665
+
+[node name="meat" type="RigidBody3D" parent="Room/Ceiling/MeatHook8"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45982, 3.08245, 0.318976)
+collision_layer = 8
+collision_mask = 8
+mass = 0.1
+
+[node name="model" parent="Room/Ceiling/MeatHook8/meat" instance=ExtResource("3_v567o")]
+transform = Transform3D(1.15, 0, 0, 0, 1.15, 0, 0, 0, 1.15, 0, -1.41294, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/Ceiling/MeatHook8/meat"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.60907, 0)
+shape = SubResource("BoxShape3D_0r2ti")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -25.0
+offset_top = 34.0
+offset_right = 25.0
+offset_bottom = 60.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "health"
+horizontal_alignment = 1
+
+[node name="Player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.73219, 0)
+script = ExtResource("4_y2tpb")
+
+[node name="Pivot" type="Node3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Player/Pivot"]
+
+[node name="knife" parent="Player/Pivot" instance=ExtResource("2_2jb2l")]
+transform = Transform3D(-0.332862, 0.926704, -0.174421, -0.021566, -0.192401, -0.981079, -0.942729, -0.322802, 0.0840282, 0.357553, -0.228907, -0.545989)
+
+[node name="Area3D" type="Area3D" parent="Player/Pivot/knife" groups=["knife"]]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player/Pivot/knife/Area3D"]
+shape = SubResource("BoxShape3D_lusjm")
+
+[node name="GhoulCollider" type="Area3D" parent="Player"]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player/GhoulCollider"]
+shape = SubResource("CapsuleShape3D_eq1pu")
+
+[node name="MeatCollider" type="StaticBody3D" parent="Player"]
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player/MeatCollider"]
+shape = SubResource("CapsuleShape3D_am2vd")
+
+[node name="PlayerCollisionShape" type="CollisionShape3D" parent="Player"]
+shape = SubResource("CapsuleShape3D_am2vd")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Player"]
+libraries = {
+"": SubResource("AnimationLibrary_7d1er")
+}
+
+[node name="Timer" type="Timer" parent="Player"]
+
+[node name="MonsterSpawner" type="Node3D" parent="."]
+script = ExtResource("1_72xek")
+
+[node name="Timer" type="Timer" parent="MonsterSpawner"]
+
+[connection signal="timeout" from="Player/Timer" to="Player" method="_on_timer_timeout"]
+[connection signal="timeout" from="MonsterSpawner/Timer" to="MonsterSpawner" method="_on_timer_timeout"]
